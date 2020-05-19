@@ -11,11 +11,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
@@ -48,9 +53,9 @@ public class customerServiceTest {
         assertEquals(20, resp.get(0).getAge().intValue());
 
         assertEquals(2, resp.get(1).getId().intValue());
-        assertEquals("jay", resp.get(1).getFirstName());
+        assertEquals("gray", resp.get(1).getFirstName());
         assertEquals("bark", resp.get(1).getLastName());
-        assertEquals("jbark@hotmail.com", resp.get(1).getEmail());
+        assertEquals("gbark@hotmail.com", resp.get(1).getEmail());
         assertEquals("0869999999", resp.get(1).getPhoneNumber());
         assertEquals(20, resp.get(1).getAge().intValue());
     }
@@ -70,16 +75,17 @@ public class customerServiceTest {
         assertEquals("park", resp.getLastName());
         assertEquals("jpark@hotmail.com", resp.getEmail());
         assertEquals("0869999999", resp.getPhoneNumber());
+        assertEquals(20, resp.getAge().intValue());
 
     }
 
 
-    @DisplayName("Test gen all customer by id should return")
+    @DisplayName("Test gen all customer by name should return list name Jay")
     @Test
     void testGetAllCustomerByName(){
         String name = "jay";
         when(customerRepository.findByFirstName(name))
-                .thenReturn(CustomerSupportTest.getCustomerList());
+                .thenReturn(CustomerSupportTest.getCustomerNameJay());
         List<Customer> resp = customerService.getCustomerName(name);
 
         assertEquals(1, resp.get(0).getId().intValue());
@@ -102,13 +108,82 @@ public class customerServiceTest {
     @Test
     void testCreateCustomer(){
         Customer reqCustomer = new Customer();
+
         reqCustomer.setFirstName("Noon");
         reqCustomer.setLastName("Bow");
-        reqCustomer.setEmail("bow@test.com");
-        reqCustomer.setPhoneNumber("0869999999");
-        reqCustomer.setAge(20);
+        reqCustomer.setEmail("noon@gmail.com");
+        reqCustomer.setPhoneNumber("1234566");
+        reqCustomer.setAge(18);
 
+        when(customerRepository.save(reqCustomer)).thenReturn(CustomerSupportTest.getNewCustomer());
+        Customer resp = customerService.createCustomer(reqCustomer);
+
+        assertEquals(1, resp.getId().intValue());
+        assertEquals("Noon", resp.getFirstName());
+        assertEquals("Bow", resp.getLastName());
+        assertEquals("noon@gmail.com", resp.getEmail());
+        assertEquals("1234566", resp.getPhoneNumber());
+        assertEquals(18, resp.getAge().intValue());
     }
 
+    @DisplayName("Test update customer should return SUCCESS")
+    @Test
+    void testUpdateCustomer(){
+        Long reqId = 1L;
+        Customer reqCustomer = new Customer();
+        reqCustomer.setId(1L);
+        reqCustomer.setFirstName("Noon");
+        reqCustomer.setLastName("Bow");
+        reqCustomer.setEmail("noon@gmail.com");
+        reqCustomer.setPhoneNumber("1234566");
+        reqCustomer.setAge(18);
+
+        when(customerRepository.findAllById(reqId)).thenReturn(CustomerSupportTest.getNewCustomer());
+        when(customerRepository.save(reqCustomer)).thenReturn(CustomerSupportTest.getNewCustomer());
+        Customer resp =  customerService.updateCustomer(reqId, reqCustomer);
+
+        assertEquals(1, resp.getId().intValue());
+        assertEquals("Noon", resp.getFirstName());
+        assertEquals("Bow", resp.getLastName());
+        assertEquals("noon@gmail.com", resp.getEmail());
+        assertEquals("1234566", resp.getPhoneNumber());
+        assertEquals(18, resp.getAge().intValue());
+    }
+
+    @DisplayName("Test update customer should return FAIL")
+    @Test
+    void testUpdateCustomerFail(){
+        Long reqId = 4L;
+        Customer reqCustomer = new Customer();
+        reqCustomer.setId(1L);
+        reqCustomer.setFirstName("Noon");
+        reqCustomer.setLastName("Bow");
+        reqCustomer.setEmail("noon@gmail.com");
+        reqCustomer.setPhoneNumber("1234566");
+        reqCustomer.setAge(18);
+
+        when(customerRepository.findAllById(reqId)).thenReturn(null);
+        Customer resp =  customerService.updateCustomer(reqId, reqCustomer);
+        assertEquals(null, resp);
+    }
+
+    @DisplayName("Test delete customer should return true")
+    @Test
+    void testDeleteCustomer(){
+        Long resqId = 1L;
+        doNothing().when(customerRepository).deleteById(resqId);
+        boolean resp = customerService.deleteCustomer(resqId);
+        assertTrue(resp);
+    }
+
+    @DisplayName("Test delete customer should return false")
+    @Test
+    void testDeleteCustomerFalse(){
+        Long reqId = 1L;
+        doThrow(EmptyResultDataAccessException.class).when(customerRepository).deleteById(reqId);
+
+        boolean resp = customerService.deleteCustomer(reqId);
+        assertFalse(resp);
+    }
 
 }

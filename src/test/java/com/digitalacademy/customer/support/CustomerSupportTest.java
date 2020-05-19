@@ -7,57 +7,31 @@ import java.util.List;
 
 public class CustomerSupportTest {
 
-    public static Customer createNewCustomer() {
-        Customer customer = new Customer();
-
-        customer.setFirstName("Madrid");
-        customer.setLastName("bababi");
-        customer.setEmail("mb@hotmail.com");
-        customer.setPhoneNumber("0869999999");
-        customer.setAge(20);
-
-        return customer;
-    }
-
-    public static Customer responseCreateNewCustomer() {
-        Customer customer = new Customer();
-
-        customer.setId(8L);
-        customer.setFirstName("Madrid");
-        customer.setLastName("bababi");
-        customer.setEmail("mb@hotmail.com");
-        customer.setPhoneNumber("0869999999");
-        customer.setAge(20);
-
-        return customer;
-    }
-
-
-    public static Customer getNewCustomer() {
-        Customer customer = new Customer();
-
-        customer.setId(1L);
-        customer.setFirstName("bong");
-        customer.setLastName("bababi");
-        customer.setEmail("bongbong@hotmail.com");
-        customer.setPhoneNumber("0869999999");
-        customer.setAge(20);
-
-        return customer;
-    }
-
-    public static Customer getUpdateCustomer() {
-        Customer customer = new Customer();
-
-        customer.setId(1L);
-        customer.setFirstName("bong2");
-        customer.setLastName("bababi");
-        customer.setEmail("bongbong@hotmail.com");
-        customer.setPhoneNumber("0869999999");
-        customer.setAge(20);
-
-        return customer;
-    }
+//    public static Customer createNewCustomer() {
+//        Customer customer = new Customer();
+//
+//        customer.setFirstName("Madrid");
+//        customer.setLastName("bababi");
+//        customer.setEmail("mb@hotmail.com");
+//        customer.setPhoneNumber("0869999999");
+//        customer.setAge(20);
+//
+//        return customer;
+//    }
+//
+//    public static Customer responseCreateNewCustomer() {
+//        Customer customer = new Customer();
+//
+//        customer.setId(8L);
+//        customer.setFirstName("Madrid");
+//        customer.setLastName("bababi");
+//        customer.setEmail("mb@hotmail.com");
+//        customer.setPhoneNumber("0869999999");
+//        customer.setAge(20);
+//
+//        return customer;
+//    }
+//
 
     public static List<Customer> getCustomerList() {
         List<Customer> customerList = new ArrayList<>();
@@ -105,6 +79,41 @@ public class CustomerSupportTest {
         customerList.add(customer);
 
         return customerList;
+    }
+
+    public static Customer getNewCustomer(){
+        Customer customer = new Customer();
+        customer.setId(1L);
+        customer.setFirstName("Noon");
+        customer.setLastName("Bow");
+        customer.setEmail("noon@gmail.com");
+        customer.setPhoneNumber("1234566");
+        customer.setAge(18);
+
+        return customer;
+    }
+
+    public static Customer createNewCustomerNoID(){
+        Customer customer = new Customer();
+        customer.setFirstName("Noon1");
+        customer.setLastName("Bow");
+        customer.setEmail("noon@gmail.com");
+        customer.setPhoneNumber("1234566");
+        customer.setAge(18);
+
+        return customer;
+    }
+
+    public static Customer getUpdateCustomer(){
+        Customer customer = new Customer();
+        customer.setId(1L);
+        customer.setFirstName("Noon2");
+        customer.setLastName("Bow");
+        customer.setEmail("noon@gmail.com");
+        customer.setPhoneNumber("1234566");
+        customer.setAge(18);
+
+        return customer;
     }
 
 }

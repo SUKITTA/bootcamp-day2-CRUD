@@ -11,13 +11,9 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestTemplate;
-import static com.sun.javaws.JnlpxArgs.verify;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -86,10 +82,14 @@ public class LoanServiceApiTest {
         assertEquals("OK",resp.getStatus());
         assertEquals("102-222-2200", resp.getAccountPayable());
         assertEquals("102-333-2200",resp.getAccountReceivable());
-        assertEquals(34000.00, resp.getPrincipleAmount());
+        assertEquals(3400000.00, resp.getPrincipleAmount());
 
-        verify(restTemplate, times(1))
-                .exchange(ArgumentMatchers.<RequestEntity<String>>any(), ArgumentMatchers.<Class<String>>any());
+//        verify(restTemplate, times(1))
+//                .exchange(ArgumentMatchers.<RequestEntity<String>>any(), ArgumentMatchers.<Class<String>>any());
+        when(restTemplate.exchange(
+                ArgumentMatchers.<RequestEntity<String>>any(),
+                ArgumentMatchers.<Class<String>>any()))
+                .thenReturn(prepareResponseSuccess());
     }
 
     @DisplayName("Test get loan info should return Internal server error 4002")
